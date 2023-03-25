@@ -1,0 +1,6 @@
+ {% extends "admin/base.html" %}
+
+ {% block userlinks %}
+    <a href="{% url 'two_factor:profile' %}">Account Security</a> /
+    {{ block.super }}
+ {% endblock %}
