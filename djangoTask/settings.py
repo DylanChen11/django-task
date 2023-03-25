@@ -36,8 +36,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "testdb",
-    "djangoTask",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +43,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    "testdb",
+    "djangoTask",
+    "rest_framework",
+    # For 2FA
+    "django_otp",
+    "django_otp.plugins.otp_static",
+    "django_otp.plugins.otp_totp",
+    "two_factor",
+    # In version 1.14.0, this is needed due to a template tag library inside this plugin.
+    "two_factor.plugins.phonenumber",
 ]
 
 MIDDLEWARE = [
@@ -53,16 +61,21 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    "django_otp.middleware.OTPMiddleware",  # must come after django.contrib.auth.middleware.AuthenticationMiddleware
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+LOGIN_URL = "two_factor:login"
+
+LOGIN_REDIRECT_URL = "/admin"
 
 ROOT_URLCONF = 'djangoTask.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "djangoTask/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -136,5 +149,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-REST_FRAMEWORK = {}
